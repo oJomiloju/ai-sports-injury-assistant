@@ -1,6 +1,6 @@
-// app/layout.js
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import { ModalProvider } from "@/components/ModalContext";
 
 export const metadata = {
   title: "InjuryInsight.AI",
@@ -10,9 +10,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="bg-gray-50">
-        <Navbar />
-        <main>{children}</main>
+      <body className="bg-gray-50 font-poppins">
+        <ModalProvider>
+          <Navbar />
+          <main>{children}</main>
+        </ModalProvider>
       </body>
     </html>
   );
