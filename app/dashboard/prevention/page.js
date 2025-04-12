@@ -30,7 +30,7 @@ export default function PreventionPage() {
             </select>
           </div>
   
-          <button type="submit" className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">
+          <button type="submit" className="bg-black text-white px-6 py-2 rounded hover:bg-gray-700">
             Get Prevention Tips
           </button>
         </form>
