@@ -1,22 +1,39 @@
+import Footer from "@/components/Footer";
+
 export default function HomePage() {
   return (
-    <div className="bg-white min-h-screen flex flex-col justify-center items-center px-4">
-      <h1 className="text-5xl font-bold mb-4 text-center">The Athletic Assistant</h1>
-      <p className="text-xl text-gray-600 mb-6 text-center max-w-xl">
-        Prevent injuries. Recover smarter. InjuryInsight.AI helps you take control of your training and recovery with personalized LLM-powered guidance.
-      </p>
-      <a
-        href="/dashboard"
-        className="bg-black text-white px-6 py-3 rounded-full text-lg hover:bg-gray-800 transition"
-      >
-        Discover
-      </a>
-      <div className="mt-16 text-center max-w-2xl">
-        <h2 className="text-2xl font-semibold mb-2">Break the bad habit</h2>
-        <p className="text-gray-600">
-          Learn how to train safely, rest smartly, and get back to your sport stronger. One of the best skills you can develop is how to listen to your body.
+    <div className="min-h-screen flex flex-col justify-between items-center px-4 bg-[#d8eafd] font-poppins">
+
+      <div className="mt-10" />
+
+      <main className="flex flex-col justify-center items-center text-center">
+        <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 mb-4 tracking-tight">
+          InjuryInsight.AI
+        </h1>
+        <p className="text-lg md:text-xl text-gray-800 max-w-2xl mb-8 font-medium">
+          Your AI-powered recovery and prevention coach. Whether you're bouncing back from an injury or staying active at the gym — we've got your back.
         </p>
-      </div>
+
+        <a
+          href="/dashboard"
+          className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold px-8 py-3 rounded-full text-lg transition shadow-md"
+        >
+          Get Started
+        </a>
+
+        <section className="mt-24 max-w-3xl">
+          <h2 className="text-2xl font-bold text-gray-900 mb-3">
+            Smarter Movement Starts Here
+          </h2>
+          <p className="text-gray-700 text-base md:text-lg font-medium">
+            We use advanced AI to summarize your injuries, create personalized rehab plans, and help you train better — whether you're lifting weights or just staying active.
+          </p>
+        </section>
+      </main>
+
+      <Footer />
     </div>
   );
 }
+
+
