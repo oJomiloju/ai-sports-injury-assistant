@@ -4,6 +4,37 @@ import { useState } from "react";
 export default function RecoveryPage() {
   const [prompt, setPrompt] = useState("");
   const [file, setFile] = useState(null);
+  const [result, setResult] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleGenerate = async () => {
+    if (!prompt) return setError("Please enter a prompt first.");
+
+    setLoading(true);
+    setError("");
+    setResult("");
+
+    try {
+      const res = await fetch("/api/generateRecovery", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt }),
+      });
+
+      const data = await res.json();
+
+      if (!data.success) {
+        setError("Something went wrong with the AI.");
+      } else {
+        setResult(data.result);
+      }
+    } catch (err) {
+      setError("Network error. Please try again.");
+    }
+
+    setLoading(false);
+  };
 
   return (
     <div className="max-w-3xl mx-auto space-y-8">
@@ -30,10 +61,21 @@ export default function RecoveryPage() {
         />
       </div>
 
-      <button className="bg-black text-white px-6 py-2 rounded hover:bg-gray-700">
-        Generate Plan
+      <button
+        onClick={handleGenerate}
+        disabled={loading}
+        className="bg-black text-white px-6 py-2 rounded hover:bg-gray-700 disabled:opacity-50"
+      >
+        {loading ? "Generating..." : "Generate Plan"}
       </button>
+
+      {error && <p className="text-red-600">{error}</p>}
+
+      {result && (
+        <div className="mt-8 p-4 bg-gray-100 border rounded whitespace-pre-wrap text-gray-800">
+          {result}
+        </div>
+      )}
     </div>
   );
 }
- 
