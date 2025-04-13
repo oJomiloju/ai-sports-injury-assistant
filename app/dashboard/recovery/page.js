@@ -1,39 +1,70 @@
 "use client";
-import { useState } from "react";
+import RecoveryPlanModal from "@/components/RecoveryPlanModal";
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function RecoveryPage() {
   const [prompt, setPrompt] = useState("");
+  const [injuryName, setInjuryName] = useState(""); // ✅ new state for injury name
   const [file, setFile] = useState(null);
-  const [result, setResult] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [plan, setPlan] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [user, setUser] = useState(null);
 
+  // ✅ Fetch authenticated user
+  useEffect(() => {
+    const fetchUser = async () => {
+      const { data } = await supabase.auth.getUser();
+      setUser(data?.user || null);
+    };
+    fetchUser();
+  }, []);
+
+  // ✅ Generate plan from Gemini
   const handleGenerate = async () => {
-    if (!prompt) return setError("Please enter a prompt first.");
+    const res = await fetch("/api/generateRecovery", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt }),
+    });
 
-    setLoading(true);
-    setError("");
-    setResult("");
+    const data = await res.json();
+    if (data.success) {
+      console.log("Received plan:", data.result);
+      setPlan(data.result);
+      setModalOpen(true);
+    } else {
+      alert("Something went wrong: " + data.error);
+    }
+  };
 
-    try {
-      const res = await fetch("/api/generateRecovery", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt }),
-      });
-
-      const data = await res.json();
-
-      if (!data.success) {
-        setError("Something went wrong with the AI.");
-      } else {
-        setResult(data.result);
-      }
-    } catch (err) {
-      setError("Network error. Please try again.");
+  // ✅ Save to Supabase
+  const handleSave = async () => {
+    if (!user) {
+      alert("User not found. Please log in again.");
+      return;
     }
 
-    setLoading(false);
+    const res = await fetch("/api/saveRecovery", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userId: user.id,
+        injury_name: injuryName || "Untitled Injury",
+        summary_input: prompt,
+        plan_output: typeof plan === "string" ? JSON.parse(plan) : plan,
+        start_date: new Date().toISOString().split("T")[0],
+        status: "active",
+      }),
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      setModalOpen(false);
+      alert("Plan saved!");
+    } else {
+      alert("Failed to save plan.");
+    }
   };
 
   return (
@@ -43,6 +74,17 @@ export default function RecoveryPage() {
         Enter a summary of your injury or upload a PDF diagnosis report. We’ll generate a recovery plan with exercises, tips, and diet guidance.
       </p>
 
+      <div>
+        <label className="block text-sm font-semibold text-gray-700 mb-1">Injury Name</label>
+        <input
+          type="text"
+          className="w-full border border-gray-300 rounded p-2 mb-4"
+          placeholder="e.g., ACL Tear"
+          value={injuryName}
+          onChange={(e) => setInjuryName(e.target.value)}
+        />
+      </div>
+
       <textarea
         rows="6"
         placeholder="Type your injury description here..."
@@ -51,31 +93,19 @@ export default function RecoveryPage() {
         onChange={(e) => setPrompt(e.target.value)}
       />
 
-      <div>
-        <label className="block mb-2 text-gray-700">Or upload a diagnosis PDF</label>
-        <input
-          type="file"
-          accept=".pdf"
-          className="border border-gray-300 p-2 rounded"
-          onChange={(e) => setFile(e.target.files[0])}
-        />
-      </div>
-
       <button
         onClick={handleGenerate}
-        disabled={loading}
-        className="bg-black text-white px-6 py-2 rounded hover:bg-gray-700 disabled:opacity-50"
+        className="bg-black text-white px-6 py-2 rounded hover:bg-gray-700"
       >
-        {loading ? "Generating..." : "Generate Plan"}
+        Generate Plan
       </button>
 
-      {error && <p className="text-red-600">{error}</p>}
-
-      {result && (
-        <div className="mt-8 p-4 bg-gray-100 border rounded whitespace-pre-wrap text-gray-800">
-          {result}
-        </div>
-      )}
+      <RecoveryPlanModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        plan={plan}
+        onSave={handleSave}
+      />
     </div>
   );
 }
