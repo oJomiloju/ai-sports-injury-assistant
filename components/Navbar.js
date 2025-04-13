@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { Mail, Lock, User, Eye, EyeOff } from "lucide-react";
 import { useModal } from "./ModalContext";
-import { Mail, Lock, User } from "lucide-react";
 
 export default function Navbar() {
   const { modalType, setModalType } = useModal();
