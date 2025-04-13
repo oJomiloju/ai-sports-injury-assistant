@@ -1,6 +1,8 @@
 "use client";
 import { useModal } from "@/components/ModalContext";
 import Footer from "@/components/Footer";
+import Image from "next/image";
+
 
 export default function HomePage() {
   const { setModalType } = useModal();
@@ -14,8 +16,9 @@ export default function HomePage() {
               InjuryInsight.AI
             </h1>
             <p className="text-2xl text-gray-800 mb-8 font-medium leading-relaxed">
-              Your AI-powered recovery and prevention coach. Whether you're bouncing back from an injury or staying active at the gym — we've got your back.
+              Your AI-powered recovery and prevention coach. Whether you&apos;re bouncing back from an injury or staying active at the gym — we&apos;ve got your back.
             </p>
+
 
             {/* GET STARTED BUTTON (opens sign-up modal) */}
             <button
@@ -36,7 +39,13 @@ export default function HomePage() {
           </div>
 
           <div className="w-full md:w-[45%]">
-            <img src="/girl.png" alt="Athlete Illustration" className="w-full h-auto" />
+          <Image
+            src="/girl.png"
+            alt="Athlete Illustration"
+            width={600}
+            height={600}
+            className="w-full h-auto"
+          />
           </div>
         </div>
       </main>
