@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## 💡 Approach
 
-## Getting Started
+This project was built with a user-first mindset, combining clean UI with intelligent, personalized insights to assist athletes through injury recovery and prevention.
 
-First, run the development server:
+### 1. User Flow Design
+The user journey is divided into two key paths:
+- **Recovery Assistant**: Users input an injury description or upload a diagnosis PDF. The AI generates a personalized recovery plan including exercises, tips, and diet suggestions.
+- **Prevention Assistant**: Users answer a short questionnaire about their sport and routine. Based on their inputs, the app provides customized risk levels and preventative tips.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### 2. LLM Integration
+I integrated Google’s `gemini-pro` model (via Gemini API) to:
+- Summarize medical descriptions
+- Generate actionable and relevant recovery guidance
+- Provide context-aware tips based on sport and history
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. Clean and Consistent UI
+Built with Tailwind CSS and React (Next.js), every screen is designed for clarity:
+- Responsive layout
+- Clear input fields with proper placeholder styling
+- Scrollable output boxes for long responses
+- Persistent navigation and intuitive routing
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### 4. Authentication + Storage
+Used Supabase for:
+- Auth (email/password)
+- User profile storage
+- Recovery/prevention plan history
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 5. Edge Case Handling
+- Errors (e.g., empty input or API failure) are clearly surfaced
+- Long AI outputs are wrapped in scrollable containers
+- File uploads are styled like native file pickers for better UX
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This architecture ensures the app is AI-powered, fast, and easy to use even for non-tech-savvy users.
