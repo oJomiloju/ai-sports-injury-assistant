@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client";
 import { useModal } from "@/components/ModalContext";
 import Footer from "@/components/Footer";
